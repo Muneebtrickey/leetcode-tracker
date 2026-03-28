@@ -4,13 +4,20 @@
     <title>LeetCode Tracker</title>
 </head>
 <body>
-    <h1>LeetCode Problems</h1>
 
-    <ul>
-        {% for p in problems %}
-            <li>{{ p.title }} - {{ p.difficulty }} - {{ p.platform }}</li>
-        {% endfor %}
-    </ul>
+<h1>LeetCode Tracker</h1>
+
+<a href="/add/">Add Problem</a>
+
+<ul>
+    {% for p in problems %}
+        <li>
+            {{ p.title }} - {{ p.difficulty }} - {{ p.platform }}
+        </li>
+    {% empty %}
+        <li>No problems added yet</li>
+    {% endfor %}
+</ul>
 
 </body>
 </html>
