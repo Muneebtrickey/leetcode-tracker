@@ -2,22 +2,133 @@
 <html>
 <head>
     <title>LeetCode Tracker</title>
+
+    <!-- Bootstrap CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
 
-<h1>LeetCode Tracker</h1>
+<body class="bg-light">
 
-<a href="/add/">Add Problem</a>
+<div class="container mt-5">
 
-<ul>
-    {% for p in problems %}
-        <li>
-            {{ p.title }} - {{ p.difficulty }} - {{ p.platform }}
-        </li>
-    {% empty %}
-        <li>No problems added yet</li>
-    {% endfor %}
-</ul>
+    <!-- 🔥 Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2>🚀 LeetCode Tracker</h2>
+        <a href="/add/" class="btn btn-primary">+ Add Problem</a>
+    </div>
+
+    <!-- 📊 Stats Cards -->
+    <div class="row mb-4">
+
+        <div class="col-md-3">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h5>Total</h5>
+                    <h3>{{ total }}</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h5>Easy</h5>
+                    <h3 class="text-success">{{ easy }}</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h5>Medium</h5>
+                    <h3 class="text-warning">{{ medium }}</h3>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card text-center shadow-sm">
+                <div class="card-body">
+                    <h5>Hard</h5>
+                    <h3 class="text-danger">{{ hard }}</h3>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- 🔥 Streak -->
+    <div class="alert alert-info text-center">
+        🔥 Current Streak: <strong>{{ streak }} days</strong>
+    </div>
+
+    <!-- 📋 Problem List -->
+    <div class="card shadow-sm">
+        <div class="card-body">
+
+            <h5 class="mb-3">Your Problems</h5>
+
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Difficulty</th>
+                        <th>Platform</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for p in problems %}
+                    <tr>
+                        <td>
+                            {% if p.problem_url %}
+                                <a href="{{ p.problem_url }}" target="_blank">
+                                    {{ p.title }}
+                                </a>
+                            {% else %}
+                                {{ p.title }}
+                            {% endif %}
+                        </td>
+
+                        <td>
+                            {% if p.difficulty == "Easy" %}
+                                <span class="badge bg-success">Easy</span>
+                            {% elif p.difficulty == "Medium" %}
+                                <span class="badge bg-warning text-dark">Medium</span>
+                            {% else %}
+                                <span class="badge bg-danger">Hard</span>
+                            {% endif %}
+                        </td>
+
+                        <td>{{ p.platform }}</td>
+
+                        <td>
+                            <!-- ⭐ Favorite -->
+                            <a href="/favorite/{{ p.id }}/" class="btn btn-sm btn-outline-warning">
+                                {% if p.is_favorite %}★{% else %}☆{% endif %}
+                            </a>
+
+                            <!-- 🗑 Delete -->
+                            <a href="/delete/{{ p.id }}/" class="btn btn-sm btn-outline-danger">
+                                Delete
+                            </a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center">No problems added yet</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+
+        </div>
+    </div>
+
+</div>
 
 </body>
 </html>
