@@ -1,134 +1,204 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>LeetCode Tracker</title>
+{% extends 'base.html' %}
 
-    <!-- Bootstrap CDN -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
+{% block title %}Dashboard | LC Tracker{% endblock %}
 
-<body class="bg-light">
-
-<div class="container mt-5">
-
-    <!-- 🔥 Header -->
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>🚀 LeetCode Tracker</h2>
-        <a href="/add/" class="btn btn-primary">+ Add Problem</a>
-    </div>
-
+{% block content %}
+<div class="row g-4 mb-4">
     <!-- 📊 Stats Cards -->
-    <div class="row mb-4">
-
-        <div class="col-md-3">
-            <div class="card text-center shadow-sm">
-                <div class="card-body">
-                    <h5>Total</h5>
-                    <h3>{{ total }}</h3>
-                </div>
+    <div class="col-md-3">
+        <div class="card p-4 h-100 border-start border-primary border-4">
+            <div class="stat-card">
+                <p>Total Solved</p>
+                <h3>{{ stats.total }}</h3>
+                <small class="text-muted">Lifetime</small>
             </div>
-        </div>
-
-        <div class="col-md-3">
-            <div class="card text-center shadow-sm">
-                <div class="card-body">
-                    <h5>Easy</h5>
-                    <h3 class="text-success">{{ easy }}</h3>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3">
-            <div class="card text-center shadow-sm">
-                <div class="card-body">
-                    <h5>Medium</h5>
-                    <h3 class="text-warning">{{ medium }}</h3>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-3">
-            <div class="card text-center shadow-sm">
-                <div class="card-body">
-                    <h5>Hard</h5>
-                    <h3 class="text-danger">{{ hard }}</h3>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
-    <!-- 🔥 Streak -->
-    <div class="alert alert-info text-center">
-        🔥 Current Streak: <strong>{{ streak }} days</strong>
-    </div>
-
-    <!-- 📋 Problem List -->
-    <div class="card shadow-sm">
-        <div class="card-body">
-
-            <h5 class="mb-3">Your Problems</h5>
-
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th>Title</th>
-                        <th>Difficulty</th>
-                        <th>Platform</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    {% for p in problems %}
-                    <tr>
-                        <td>
-                            {% if p.problem_url %}
-                                <a href="{{ p.problem_url }}" target="_blank">
-                                    {{ p.title }}
-                                </a>
-                            {% else %}
-                                {{ p.title }}
-                            {% endif %}
-                        </td>
-
-                        <td>
-                            {% if p.difficulty == "Easy" %}
-                                <span class="badge bg-success">Easy</span>
-                            {% elif p.difficulty == "Medium" %}
-                                <span class="badge bg-warning text-dark">Medium</span>
-                            {% else %}
-                                <span class="badge bg-danger">Hard</span>
-                            {% endif %}
-                        </td>
-
-                        <td>{{ p.platform }}</td>
-
-                        <td>
-                            <!-- ⭐ Favorite -->
-                            <a href="/favorite/{{ p.id }}/" class="btn btn-sm btn-outline-warning">
-                                {% if p.is_favorite %}★{% else %}☆{% endif %}
-                            </a>
-
-                            <!-- 🗑 Delete -->
-                            <a href="/delete/{{ p.id }}/" class="btn btn-sm btn-outline-danger">
-                                Delete
-                            </a>
-                        </td>
-                    </tr>
-                    {% empty %}
-                    <tr>
-                        <td colspan="4" class="text-center">No problems added yet</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-
-            </table>
-
         </div>
     </div>
-
+    <div class="col-md-3">
+        <div class="card p-4 h-100 border-start border-success border-4">
+            <div class="stat-card">
+                <p>Easy</p>
+                <h3 class="text-success">{{ stats.Easy }}</h3>
+                <small class="text-muted">Problems</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card p-4 h-100 border-start border-warning border-4">
+            <div class="stat-card">
+                <p>Medium</p>
+                <h3 class="text-warning">{{ stats.Medium }}</h3>
+                <small class="text-muted">Problems</small>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card p-4 h-100 border-start border-danger border-4">
+            <div class="stat-card">
+                <p>Hard</p>
+                <h3 class="text-danger">{{ stats.Hard }}</h3>
+                <small class="text-muted">Problems</small>
+            </div>
+        </div>
+    </div>
 </div>
 
-</body>
-</html>
+<div class="row g-4">
+    <!-- 📈 Chart Section -->
+    <div class="col-lg-8">
+        <div class="card p-4 h-100">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h5 class="mb-0">Problem Distribution</h5>
+                <span class="badge bg-primary px-3 py-2">🔥 Streak: {{ streak_count }} Days</span>
+            </div>
+            <div style="height: 300px;">
+                <canvas id="progressChart"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🔥 Streak Details -->
+    <div class="col-lg-4">
+        <div class="card p-4 h-100 bg-primary text-white overflow-hidden position-relative">
+            <div class="position-relative z-1">
+                <h5>Streak Dashboard</h5>
+                <div class="mt-4">
+                    <p class="mb-1 opacity-75">Current Streak</p>
+                    <h2 class="display-5 fw-bold">{{ streak_count }} <small class="fs-4">Days</small></h2>
+                </div>
+                <div class="mt-3">
+                    <p class="mb-1 opacity-75">Longest Streak</p>
+                    <h4 class="fw-semibold">{{ longest_streak }} Days</h4>
+                </div>
+                <div class="mt-4">
+                    <a href="{% url 'add_problem' %}" class="btn btn-light text-primary fw-bold">Maintain Streak</a>
+                </div>
+            </div>
+            <i class="fas fa-fire position-absolute bottom-0 end-0 p-3 opacity-25" style="font-size: 8rem; margin-bottom: -2rem; margin-right: -1rem;"></i>
+        </div>
+    </div>
+
+    <!-- 📋 Recent Activity -->
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Recent Activity</h5>
+                <a href="{% url 'add_problem' %}" class="btn btn-sm btn-outline-primary">View All</a>
+            </div>
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0">
+                    <thead class="bg-light">
+                        <tr>
+                            <th class="ps-4">Problem</th>
+                            <th>Difficulty</th>
+                            <th>Platform</th>
+                            <th>Date</th>
+                            <th class="text-end pe-4">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for p in problems %}
+                        <tr>
+                            <td class="ps-4">
+                                <div class="d-flex align-items-center">
+                                    <div class="me-3">
+                                        {% if p.is_favorite %}
+                                            <i class="fas fa-star text-warning"></i>
+                                        {% else %}
+                                            <i class="far fa-star text-muted"></i>
+                                        {% endif %}
+                                    </div>
+                                    <div>
+                                        <h6 class="mb-0">
+                                            {% if p.problem_url %}
+                                                <a href="{{ p.problem_url }}" target="_blank" class="text-decoration-none text-dark">{{ p.title }}</a>
+                                            {% else %}
+                                                {{ p.title }}
+                                            {% endif %}
+                                        </h6>
+                                        <small class="text-muted">{{ p.platform }}</small>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                {% if p.difficulty == "Easy" %}
+                                    <span class="badge badge-easy">Easy</span>
+                                {% elif p.difficulty == "Medium" %}
+                                    <span class="badge badge-medium">Medium</span>
+                                {% else %}
+                                    <span class="badge badge-hard">Hard</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ p.platform }}</td>
+                            <td>{{ p.date_solved|date:"M d, Y" }}</td>
+                            <td class="text-end pe-4">
+                                <div class="dropdown">
+                                    <button class="btn btn-sm btn-light border" type="button" data-bs-toggle="dropdown">
+                                        <i class="fas fa-ellipsis-v"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end">
+                                        <li><a class="dropdown-item" href="{% url 'edit_problem' p.id %}"><i class="fas fa-edit me-2"></i> Edit</a></li>
+                                        <li><a class="dropdown-item" href="{% url 'toggle_favorite' p.id %}"><i class="fas fa-star me-2"></i> Toggle Favorite</a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item text-danger" href="{% url 'delete_problem' p.id %}"><i class="fas fa-trash me-2"></i> Delete</a></li>
+                                    </ul>
+                                </div>
+                            </td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center py-5">
+                                <div class="text-muted">
+                                    <i class="fas fa-inbox fa-3x mb-3"></i>
+                                    <p>No problems recorded yet. Start your journey today!</p>
+                                    <a href="{% url 'add_problem' %}" class="btn btn-primary btn-sm">Add Your First Problem</a>
+                                </div>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const ctx = document.getElementById('progressChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: {{ chart_labels|safe }},
+            datasets: [{
+                label: 'Problems Solved',
+                data: {{ chart_data|safe }},
+                backgroundColor: [
+                    'rgba(16, 185, 129, 0.8)',
+                    'rgba(245, 158, 11, 0.8)',
+                    'rgba(239, 68, 68, 0.8)'
+                ],
+                borderRadius: 8,
+                borderSkipped: false,
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    grid: { display: false }
+                },
+                x: {
+                    grid: { display: false }
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}
