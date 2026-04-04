@@ -1,73 +1,73 @@
-# 🚀 Professional LeetCode Progress Tracker
+# LeetCode Progress Tracker
 
-A modern, high-performance web application designed for software engineers to track their algorithmic problem-solving journey. Built with **Django 6**, **Bootstrap 5**, and **Chart.js**, this platform helps users visualize progress, maintain consistency via streaks, and document technical insights.
+A comprehensive web application designed for software engineers to monitor and visualize their algorithmic problem-solving progress. This platform provides a structured environment to document technical insights, maintain consistency, and analyze performance metrics over time.
 
-![Dashboard Preview](https://via.placeholder.com/800x450?text=Modern+Dashboard+with+Chart.js+Visualization)
+Built with a focus on clean architecture and performance, the tracker leverages Django for the backend, Bootstrap for a responsive user interface, and Chart.js for data visualization.
 
-## ✨ Key Features
+## Core Features
 
--   **📊 Dynamic Dashboard:** Visual representation of problem distribution (Easy/Medium/Hard) using Chart.js.
--   **🔥 Consistency Engine:** Automated streak tracking to keep you motivated and accountable.
--   **📋 Comprehensive Logging:** Track platform, difficulty, time taken, attempts, and personal notes for each problem.
--   **⭐ Portfolio-Ready:** Mark favorite problems and build a curated list of your technical accomplishments.
--   **👤 Secure Authentication:** Full user registration and login system.
--   **📱 Responsive Design:** Fully accessible on mobile, tablet, and desktop devices.
+-   **Analytical Dashboard:** Provides a visual breakdown of solved problems by difficulty level, helping users identify areas for improvement.
+-   **Consistency Tracking:** Automated streak monitoring to encourage daily practice and accountability.
+-   **Detailed Problem Logging:** Capture essential data for every problem, including platform, difficulty, time spent, attempts, and personal technical notes.
+-   **Curated Favorites:** Ability to bookmark significant problems for future review or portfolio highlights.
+-   **Secure Authentication:** A robust user management system with secure registration and login workflows.
+-   **Responsive Design:** Fully optimized for seamless use across mobile, tablet, and desktop environments.
 
-## 🛠️ Tech Stack
+## Technical Specifications
 
 -   **Backend:** Python 3.12, Django 6.0
--   **Frontend:** HTML5, CSS3 (Inter Google Font), Bootstrap 5.3
+-   **Frontend:** HTML5, CSS3, Bootstrap 5.3
+-   **Data Visualization:** Chart.js 4.0
 -   **Icons:** FontAwesome 6.4
--   **Charts:** Chart.js 4.0
--   **Database:** SQLite (Default) / PostgreSQL (Production ready)
+-   **Database:** SQLite for development, configured for PostgreSQL in production.
 
-## ⚙️ Installation & Setup
+## Installation and Configuration
 
-### 1. Clone the repository
+### 1. Repository Setup
 ```bash
 git clone https://github.com/yourusername/leetcode-tracker.git
 cd leetcode-tracker
 ```
 
-### 2. Set up Virtual Environment
+### 2. Environment Configuration
 ```bash
 python -m venv venv
 source venv/bin/activate  # On Windows: venv\Scripts\activate
 ```
 
-### 3. Install Dependencies
+### 3. Dependency Management
 ```bash
 pip install -r requirements.txt
 ```
 
-### 4. Database Migrations
+### 4. Database Initialization
 ```bash
 python manage.py makemigrations
 python manage.py migrate
 ```
 
-### 5. Start Development Server
+### 5. Local Execution
 ```bash
 python manage.py runserver
 ```
-Visit `http://127.0.0.1:8000/` in your browser.
+Access the application at `http://127.0.0.1:8000/`.
 
-## 📁 Project Structure
+## Project Organization
 
 ```text
-leetcode_tracker/    # Core project settings
-tracker/             # Main application logic
-├── models.py        # Database schema (Problems, Streaks, Progress)
-├── views.py         # Business logic & Dashboard generation
-├── forms.py         # Secure data handling
-└── templates/       # UI Layer (Base, Home, Signup, etc.)
+leetcode_tracker/    # Core project configuration
+tracker/             # Main application modules
+├── models.py        # Database schema for problems and progress
+├── views.py         # Business logic and dashboard controllers
+├── forms.py         # Data validation and handling
+└── templates/       # UI components and layout files
 ```
 
-## 📝 Future Roadmap
+## Development Roadmap
 
--   [ ] Automated LeetCode API integration for fetching problem data.
--   [ ] Export progress as a professional PDF/Web Resume.
--   [ ] Social features to compare streaks with friends.
+-   Integration with the LeetCode API for automated data synchronization.
+-   Functionality to export progress reports as professional PDF documents.
+-   Collaborative features to enable shared streaks and peer benchmarking.
 
 ---
-*Created by a Passionate Developer | Professional Software Engineering Portfolio*
+*Developed as part of a professional software engineering portfolio.*
